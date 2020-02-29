@@ -56,27 +56,29 @@ const port = 3000;
 
 app.use(bodyParser.json());
 
-// read all movies
+// read all movies, pagination
 app.get("/movies", (request, response, next) => {
   const limit = Math.min(request.query.limit || 25, 150);
   const offset = request.query.offset || 0;
 
   Movie.findAndCountAll({ limit, offset })
     .then(list => {
-      response.send({ movies: list.rows, total: list.count });
+      response.send({ Movies: list.rows, Total: list.count });
     })
     .catch(next);
 });
 
 //read single movie
 app.get("/movies/:movieId", (request, response, next) => {
-  Movie.findByPk(request.params.movieId).then(movie => {
-    if (!movie) {
-      response.status(404).end();
-    } else {
-      response.json(movie);
-    }
-  });
+  Movie.findByPk(request.params.movieId)
+    .then(movie => {
+      if (!movie) {
+        response.status(404).end();
+      } else {
+        response.json(movie);
+      }
+    })
+    .catch(next);
 });
 
 //create new movie resource
