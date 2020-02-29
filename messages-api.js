@@ -19,7 +19,6 @@ app.use(bodyParser.json());
 
 app.post("/messages", (request, response, next) => {
   // console.log(request.body);
-
   if (request.body.text) {
     counting++;
     response.json({ text: request.body.text });
