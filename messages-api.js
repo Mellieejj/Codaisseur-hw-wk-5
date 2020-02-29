@@ -17,7 +17,7 @@ const requestCounting = function(request, response, next) {
 app.use(requestCounting);
 app.use(bodyParser.json());
 
-app.post("/", (request, response, next) => {
+app.post("/messages", (request, response, next) => {
   // console.log(request.body);
 
   if (request.body.text) {
