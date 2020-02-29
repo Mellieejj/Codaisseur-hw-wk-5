@@ -8,7 +8,7 @@ let counting = 0;
 
 const requestCounting = function(request, response, next) {
   if (counting >= 5) {
-    return response.status(429).next();
+    return next(response.status(429).send("Too Many Requests"));
   } else {
     next();
   }
@@ -18,13 +18,14 @@ app.use(requestCounting);
 app.use(bodyParser.json());
 
 app.post("/", (request, response, next) => {
-  console.log(request.body);
-  counting++;
-  const responseText =
-    request.body.text || response.status(400).json("Bad Request");
-  response.json({
-    text: responseText
-  });
+  // console.log(request.body);
+
+  if (request.body.text) {
+    counting++;
+    response.json({ text: request.body.text });
+  } else {
+    response.status(400).send("Bad Request, try again");
+  }
 });
 
 app.listen(port, () => {
